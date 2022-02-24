@@ -13,9 +13,9 @@ import Appendix_MC_calculation as MC_calc
 from scipy import stats
 
 # Import deviation and convergence dictionaries
-deviations = pickle.load(open("C:\Users\karel\Documents\HU\Sideprojects\uncertainty_measures\App-deviations.p", "rb"))
-convergence = pickle.load(open("C:\Users\karel\Documents\HU\Sideprojects\uncertainty_measures\App-convergence.p", "rb"))
-development = pickle.load(open("C:\Users\karel\Documents\HU\Sideprojects\uncertainty_measures\App-development.p", "rb"))
+deviations = pickle.load(open("App-deviations.p", "rb"))
+convergence = pickle.load(open("App-convergence.p", "rb"))
+development = pickle.load(open("App-development.p", "rb"))
 
 
 # Print mean and uncertainty of the different uncertainty measures as shown in the distribution plot
