@@ -12,32 +12,36 @@ import pickle
 import Appendix_MC_calculation as MC_calc
 from scipy import stats
 
-# Import deviation and convergence dictionaries
-deviations = pickle.load(open("App-deviations.p", "rb"))
-convergence = pickle.load(open("App-convergence.p", "rb"))
-development = pickle.load(open("App-development.p", "rb"))
+deviations = pickle.load(open("./App-deviations.p", "rb"))
+convergence = pickle.load(open("./App-convergence.p", "rb"))
+development = pickle.load(open("./App-development.p", "rb"))
+
+
+font = {'size'   : 13}
+
+plt.rc('font', **font)
 
 
 # Print mean and uncertainty of the different uncertainty measures as shown in the distribution plot
-print "              Mean SDOM SD   SD(10)"
-print "Min-max:      "+str(round(MC_calc.stddev(deviations["minmax"])["mean"],2))+" "+str(round(MC_calc.stddev(deviations["minmax"])["uncertainty"]/np.sqrt(deviations["no_draws"]),2))+" "+str(round(MC_calc.stddev(deviations["minmax"])["uncertainty"],2))+" "+str(round(development["minmax_uncs"][8],2))
-print "Excl. Extr.: "+str(round(MC_calc.stddev(deviations["exclextr"])["mean"],2))+" "+str(round(MC_calc.stddev(deviations["exclextr"])["uncertainty"]/np.sqrt(deviations["no_draws"]),2))+" "+str(round(MC_calc.stddev(deviations["exclextr"])["uncertainty"],2))+" "+str(round(development["exclextr_uncs"][8],2))
-print "Middle 50%:  "+str(round(MC_calc.stddev(deviations["middle"])["mean"],2))+" "+str(round(MC_calc.stddev(deviations["middle"])["uncertainty"]/np.sqrt(deviations["no_draws"]),2))+" "+str(round(MC_calc.stddev(deviations["middle"])["uncertainty"],2))+" "+str(round(development["middle_uncs"][8],2))
-print "MAD:         "+str(round(MC_calc.stddev(deviations["mad"])["mean"],2))+" "+str(round(MC_calc.stddev(deviations["mad"])["uncertainty"]/np.sqrt(deviations["no_draws"]),2))+" "+str(round(MC_calc.stddev(deviations["mad"])["uncertainty"],2))+" "+str(round(development["mad_uncs"][8],2))
-# print "IQR:         "+str(round(MC_calc.stddev(deviations["iqr"])["mean"],2))+" "+str(round(MC_calc.stddev(deviations["iqr"])["uncertainty"]/np.sqrt(deviations["no_draws"]),2))+" "+str(round(MC_calc.stddev(deviations["iqr"])["uncertainty"],2))+" "+str(round(development["iqr_uncs"][8],2))
-print "Std. Dev.:   "+str(round(MC_calc.stddev(deviations["stddev"])["mean"],2))+" "+str(round(MC_calc.stddev(deviations["stddev"])["uncertainty"]/np.sqrt(deviations["no_draws"]),2))+"  "+str(round(MC_calc.stddev(deviations["stddev"])["uncertainty"],2))+" "+str(round(development["stddev_uncs"][8],2))
-print "68% meas.:   "+str(round(MC_calc.stddev(deviations["close68"])["mean"],2))+" "+str(round(MC_calc.stddev(deviations["close68"])["uncertainty"]/np.sqrt(deviations["no_draws"]),2))+"  "+str(round(MC_calc.stddev(deviations["close68"])["uncertainty"],2))+" "+str(round(development["close68_uncs"][8],2))
-print "Percentage:  "+str(round(MC_calc.stddev(deviations["percmeas"])["mean"],2))+" "+str(round(MC_calc.stddev(deviations["percmeas"])["uncertainty"]/np.sqrt(deviations["no_draws"]),2))+" "+str(round(MC_calc.stddev(deviations["percmeas"])["uncertainty"],2))+" "+str(round(development["percmeas_uncs"][8],2))
+print ("              Mean SDOM SD   SD(10)")
+print ("Min-max:      "+str(round(MC_calc.stddev(deviations["minmax"])["mean"],2))+" "+str(round(MC_calc.stddev(deviations["minmax"])["uncertainty"]/np.sqrt(deviations["no_draws"]),2))+" "+str(round(MC_calc.stddev(deviations["minmax"])["uncertainty"],2))+" "+str(round(development["minmax_uncs"][8],2)))
+print ("Excl. Extr.: "+str(round(MC_calc.stddev(deviations["exclextr"])["mean"],2))+" "+str(round(MC_calc.stddev(deviations["exclextr"])["uncertainty"]/np.sqrt(deviations["no_draws"]),2))+" "+str(round(MC_calc.stddev(deviations["exclextr"])["uncertainty"],2))+" "+str(round(development["exclextr_uncs"][8],2)))
+print ("Middle 50%:  "+str(round(MC_calc.stddev(deviations["middle"])["mean"],2))+" "+str(round(MC_calc.stddev(deviations["middle"])["uncertainty"]/np.sqrt(deviations["no_draws"]),2))+" "+str(round(MC_calc.stddev(deviations["middle"])["uncertainty"],2))+" "+str(round(development["middle_uncs"][8],2)))
+print ("MAD:         "+str(round(MC_calc.stddev(deviations["mad"])["mean"],2))+" "+str(round(MC_calc.stddev(deviations["mad"])["uncertainty"]/np.sqrt(deviations["no_draws"]),2))+" "+str(round(MC_calc.stddev(deviations["mad"])["uncertainty"],2))+" "+str(round(development["mad_uncs"][8],2)))
+# print ("IQR:         "+str(round(MC_calc.stddev(deviations["iqr"])["mean"],2))+" "+str(round(MC_calc.stddev(deviations["iqr"])["uncertainty"]/np.sqrt(deviations["no_draws"]),2))+" "+str(round(MC_calc.stddev(deviations["iqr"])["uncertainty"],2))+" "+str(round(development["iqr_uncs"][8],2)))
+print ("Std. Dev.:   "+str(round(MC_calc.stddev(deviations["stddev"])["mean"],2))+" "+str(round(MC_calc.stddev(deviations["stddev"])["uncertainty"]/np.sqrt(deviations["no_draws"]),2))+"  "+str(round(MC_calc.stddev(deviations["stddev"])["uncertainty"],2))+" "+str(round(development["stddev_uncs"][8],2)))
+print ("68% meas.:   "+str(round(MC_calc.stddev(deviations["close68"])["mean"],2))+" "+str(round(MC_calc.stddev(deviations["close68"])["uncertainty"]/np.sqrt(deviations["no_draws"]),2))+"  "+str(round(MC_calc.stddev(deviations["close68"])["uncertainty"],2))+" "+str(round(development["close68_uncs"][8],2)))
+print ("Percentage:  "+str(round(MC_calc.stddev(deviations["percmeas"])["mean"],2))+" "+str(round(MC_calc.stddev(deviations["percmeas"])["uncertainty"]/np.sqrt(deviations["no_draws"]),2))+" "+str(round(MC_calc.stddev(deviations["percmeas"])["uncertainty"],2))+" "+str(round(development["percmeas_uncs"][8],2)))
 
 
-print "\nRange of uncertainties"
-print "Min-Max:   "+str(round(min(development["minmax_uncs"]) ,2))+" - "+str(round(max(development["minmax_uncs"]) ,2))
-print "Excl.Extr: "+str(round(min(development["exclextr_uncs"]) ,2))+" - "+str(round(max(development["exclextr_uncs"]) ,2))
-print "Middle 50: "+str(round(min(development["middle_uncs"]) ,2))+" - "+str(round(max(development["middle_uncs"]) ,2))
-print "MAD:       "+str(round(min(development["mad_uncs"]) ,2))+" - "+str(round(max(development["mad_uncs"]) ,2))
-print "Std.Dev.:  "+str(round(min(development["stddev_uncs"]) ,2))+" - "+str(round(max(development["stddev_uncs"]) ,2))
-print "Close68:   "+str(round(min(development["close68_uncs"]) ,2))+" - "+str(round(max(development["minmax_uncs"]) ,2))
-print "Percent:   "+str(round(min(development["percmeas_uncs"]) ,2))+" - "+str(round(max(development["minmax_uncs"]) ,2))
+print ("\nRange of uncertainties")
+print ("Min-Max:   "+str(round(min(development["minmax_uncs"]) ,2))+" - "+str(round(max(development["minmax_uncs"]) ,2)))
+print ("Excl.Extr: "+str(round(min(development["exclextr_uncs"]) ,2))+" - "+str(round(max(development["exclextr_uncs"]) ,2)))
+print ("Middle 50: "+str(round(min(development["middle_uncs"]) ,2))+" - "+str(round(max(development["middle_uncs"]) ,2)))
+print ("MAD:       "+str(round(min(development["mad_uncs"]) ,2))+" - "+str(round(max(development["mad_uncs"]) ,2)))
+print ("Std.Dev.:  "+str(round(min(development["stddev_uncs"]) ,2))+" - "+str(round(max(development["stddev_uncs"]) ,2)))
+print ("Close68:   "+str(round(min(development["close68_uncs"]) ,2))+" - "+str(round(max(development["minmax_uncs"]) ,2)))
+print ("Percent:   "+str(round(min(development["percmeas_uncs"]) ,2))+" - "+str(round(max(development["minmax_uncs"]) ,2)))
 min_size_of_sample = 4
 max_size_of_sample = 21
 
@@ -61,7 +65,7 @@ plt.plot(range(2, len(convergence["stddev"])+2), convergence["stddev"], label = 
 plt.xlabel("Number of repetitions")
 plt.ylabel(r"Mean uncertainty deviation $\Delta$")
 plt.legend(loc = 1, handlelength=3.5)
-
+plt.tight_layout()
 
 fig1 = plt.figure(1)
 plt.hist(deviations["minmax"], 50, alpha = .4, label = "Min-max")
@@ -75,6 +79,7 @@ plt.axvline(x=0., color = "black")
 plt.xlabel(r"Uncertainty deviation $\Delta$")
 plt.ylabel(r"Counts")
 plt.legend()
+plt.tight_layout()
 
 fig3 = plt.figure(2)
 plt.fill_between(range(min_size_of_sample,max_size_of_sample), development["minmax_means"] - development["minmax_uncs"], development["minmax_means"] + development["minmax_uncs"], alpha = .2)
@@ -95,6 +100,7 @@ plt.ylim(-0.9, 1.8)
 # Based on 10$^4$ repetitions.
 # Highlighted regions indicate standard deviation of single subsamples.""")
 plt.legend(handlelength=3.5)
+plt.tight_layout()
 
 
 fig4 = plt.figure(4)
@@ -116,6 +122,7 @@ plt.ylim(-0.9, 1.8)
 # Based on 10$^4$ repetitions.
 # Highlighted regions indicate standard deviation of single subsamples.""")
 plt.legend(handlelength=3.5)
+plt.tight_layout()
 
 
 plt.show()

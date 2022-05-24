@@ -20,50 +20,50 @@ calculate_distributions = True
 calculate_convergence = True # Requires calculate_distributions to be true
 calculate_sample_size_distributions = True
 
-def stddev(set, sample = True):
+def stddev(sample_set, sample = True):
 	"""Takes an array and calculates its mean and uncertainty. If the parameter sample is set to true, the returned uncertainty is the sample standard deviation for a (limited) subsample is calculated, when nothing is provided, the population standard deviation is calculated. The function returns a dictionary with keys "mean" and "uncertainty"."""
-	meanval = 1.*sum(set)/len(set)
-	if sample: uncert = np.sqrt(1./(len(set)-1.) * sum((set-meanval)**2) )
-	else: uncert = np.sqrt(1./len(set) * sum((set-meanval)**2) )
+	meanval = 1.*sum(sample_set)/len(sample_set)
+	if sample: uncert = np.sqrt(1./(len(sample_set)-1.) * sum((sample_set-meanval)**2) )
+	else: uncert = np.sqrt(1./len(sample_set) * sum((sample_set-meanval)**2) )
 	return {"mean" : meanval, "uncertainty" : uncert}
 
-def minmax(set):
+def minmax(sample_set):
 	"""Takes an array and calculates its mean and uncertainty. The uncertainty is the largest distance of the min/max to the mean. The function returns a dictionary with keys "mean" and "uncertainty"."""
-	meanval = 1.*sum(set)/len(set)
-	mindist = meanval - min(set)
-	maxdist = max(set) - meanval
+	meanval = 1.*sum(sample_set)/len(sample_set)
+	mindist = meanval - min(sample_set)
+	maxdist = max(sample_set) - meanval
 	uncert = max(mindist, maxdist)
 	return {"mean" : meanval, "uncertainty" : uncert}
 
-def exclextr(set):
+def exclextr(sample_set):
 	"""Takes an array and calculates its mean and uncertainty. The variable extremesexcluded indicates how many of the extreme values from the set have to be excluded. 1 indicating that 1 max and 1 min value are excluded. The uncertainty is the largest distance of the min/max to the mean. The function returns a dictionary with keys "mean" and "uncertainty"."""
 	extremesexcluded = 1
-	meanval = 1.*sum(set)/len(set)
-	set = sorted(set)[extremesexcluded:len(set) - extremesexcluded]
-	mindist = meanval - min(set)
-	maxdist = max(set) - meanval
+	meanval = 1.*sum(sample_set)/len(sample_set)
+	sample_set = sorted(sample_set)[extremesexcluded:len(sample_set) - extremesexcluded]
+	mindist = meanval - min(sample_set)
+	maxdist = max(sample_set) - meanval
 	uncert = max(mindist, maxdist)
 	return {"mean" : meanval, "uncertainty" : uncert}
 	
-def middle(set):
+def middle(sample_set):
 	"""Takes an array and calculates its mean and uncertainty. The variable percentage set at 50 indicates that 50% of the sorted set are used in the uncertainty calculation. The uncertainty is the largest distance of the min/max to the mean. The function returns a dictionary with keys "mean" and "uncertainty"."""
 	percentage = 50
-	meanval = 1.*sum(set)/len(set)
-	set = sorted(set)
-	cutmeasurements = int((percentage/2.)/100.*len(set))
-	set = set[cutmeasurements:len(set) - cutmeasurements]
-	mindist = meanval - min(set)
-	maxdist = max(set) - meanval
+	meanval = 1.*sum(sample_set)/len(sample_set)
+	sample_set = sorted(sample_set)
+	cutmeasurements = int((percentage/2.)/100.*len(sample_set))
+	sample_set = sample_set[cutmeasurements:len(sample_set) - cutmeasurements]
+	mindist = meanval - min(sample_set)
+	maxdist = max(sample_set) - meanval
 	uncert = max(mindist, maxdist)
 	return {"mean" : meanval, "uncertainty" : uncert}
 
-def percmeas(set):
+def percmeas(sample_set):
 	"""Takes an array and first calculates how many items should be discarded so that the percentage of remaining measurements is the closest to a certain percentage. This percentage is set by the variable fraction. Then it calculates the min-max interval of the remaining set."""
 	fraction = .76
-	meanval = 1.*sum(set)/len(set)
-	differences = np.abs(set - meanval)
+	meanval = 1.*sum(sample_set)/len(sample_set)
+	differences = np.abs(sample_set - meanval)
 	# Identify the number of measurements that need to be discarded so that the remaining set contains the closest percentage to 68% of the original set as possible.
-	N = len(set)
+	N = len(sample_set)
 	abs_percentage_difference = np.abs((np.arange(N)+1.)/N - fraction)
 	smallest_percentage_difference = min(abs_percentage_difference)
 	smallest_id = np.argwhere(abs_percentage_difference == smallest_percentage_difference)[0][0]
@@ -72,44 +72,44 @@ def percmeas(set):
 	# Discard the biggest outliers as compared to the mean
 	for i in range(number_of_items_to_discard):
 		cut_index = np.where(differences == max(differences))[0][0]
-		set = np.delete(set, cut_index)
+		sample_set = np.delete(sample_set, cut_index)
 		differences = np.delete(differences, cut_index)
 	# Calculate uncertainty
-	mindist = meanval - min(set)
-	maxdist = max(set) - meanval
+	mindist = meanval - min(sample_set)
+	maxdist = max(sample_set) - meanval
 	uncert = max(mindist, maxdist)
 	return {"mean" : meanval, "uncertainty" : uncert}
 	
-def mad(set):
+def mad(sample_set):
 	"""takes an array and calculates its mean and uncertainty. The uncertainty is the mean absolute deviation (MAD). The function returns a dictionary with keys "mean" and "uncertainty"."""
-	meanval = 1.*sum(set)/len(set)
-	uncert = 1.*sum( np.abs( set - meanval ) )/ len(set)
+	meanval = 1.*sum(sample_set)/len(sample_set)
+	uncert = 1.*sum( np.abs( sample_set - meanval ) )/ len(sample_set)
 	return {"mean" : meanval, "uncertainty" : uncert}
 
-def iqr(set):
+def iqr(sample_set):
 	"""Takes an array and calculates the mean and uncertainty. The uncertainty is the Inter Quartile Range (IQR). The function returns a dictionary with keys "mean" and "uncertainty"."""
-	meanval = 1.*sum(set)/len(set)
-	set = sorted(set)
-	if (len(set) % 2 == 0):
-		lower_quart = set[:len(set)/2]
+	meanval = 1.*sum(sample_set)/len(sample_set)
+	sample_set = sorted(sample_set)
+	if (len(sample_set) % 2 == 0):
+		lower_quart = sample_set[:int(len(sample_set)/2)]
 		lower_bound = np.median(lower_quart)
-		upper_quart = set[len(set)/2:]
+		upper_quart = sample_set[int(len(sample_set)/2):]
 		upper_bound = np.median(upper_quart)
 		uncert = max(np.abs(lower_bound - meanval), np.abs(upper_bound - meanval))	
 	else:
-		lower_quart = set[:len(set)/2+1]
+		lower_quart = sample_set[:int(len(sample_set)/2+1)]
 		lower_bound = np.median(lower_quart)
-		upper_quart = set[len(set)/2:]
+		upper_quart = sample_set[int(len(sample_set)/2):]
 		upper_bound = np.median(upper_quart)
 		uncert = max(np.abs(lower_bound - meanval), np.abs(upper_bound - meanval))
 	return {"mean" : meanval, "uncertainty" : uncert}
 
-def close68(set):
+def close68(sample_set):
 	"""Takes an array and first calculates how many items should be discarded so that the percentage of remaining measurements is the closest to 68%. Then it calculates the min-max interval of the remaining set."""
-	meanval = 1.*sum(set)/len(set)
-	differences = np.abs(set - meanval)
+	meanval = 1.*sum(sample_set)/len(sample_set)
+	differences = np.abs(sample_set - meanval)
 	# Identify the number of measurements that need to be discarded so that the remaining set contains the closest percentage to 68% of the original set as possible.
-	N = len(set)
+	N = len(sample_set)
 	abs_percentage_difference = np.abs((np.arange(N)+1.)/N - 0.68)
 	smallest_percentage_difference = min(abs_percentage_difference)
 	smallest_id = np.argwhere(abs_percentage_difference == smallest_percentage_difference)[0][0]
@@ -118,11 +118,11 @@ def close68(set):
 	# Discard the biggest outliers as compared to the mean
 	for i in range(number_of_items_to_discard):
 		cut_index = np.where(differences == max(differences))[0][0]
-		set = np.delete(set, cut_index)
+		sample_set = np.delete(sample_set, cut_index)
 		differences = np.delete(differences, cut_index)
 	# Calculate uncertainty
-	mindist = meanval - min(set)
-	maxdist = max(set) - meanval
+	mindist = meanval - min(sample_set)
+	maxdist = max(sample_set) - meanval
 	uncert = max(mindist, maxdist)
 	return {"mean" : meanval, "uncertainty" : uncert}
 
@@ -138,11 +138,12 @@ def draw_set(SET, no_iterations, no_draws, return_distribution):
 	frac_stddev_iqr = np.array([])
 	frac_stddev_close68 = np.array([])
 	frac_stddev_stddev = np.array([])
+	
 
 	# Run the calculational process no_iterations times
 	for run in range(no_iterations):
 		# Draw the SUBSET
-		SUBSET = sample(SET,no_draws)
+		SUBSET = sample(sorted(SET),no_draws)
 		# Calculate uncertainties
 		frac_stddev_minmax = np.append(frac_stddev_minmax, (minmax(SUBSET)["uncertainty"] - real_stddev) / real_stddev)
 		frac_stddev_exclextr = np.append(frac_stddev_exclextr, (exclextr(SUBSET)["uncertainty"] - real_stddev) / real_stddev)
@@ -165,6 +166,7 @@ if __name__=="__main__":
 
 	# Create the base set and calculate mean and uncertainty.
 	np.random.seed(2)
+	
 	SET = np.random.normal(100,20,1000)
 	real_mean = stddev(SET)["mean"]
 	real_stddev = stddev(SET)["uncertainty"]
@@ -186,7 +188,7 @@ if __name__=="__main__":
 		deviations["stddev"] = dev_stddev
 		deviations["SET"] = SET
 		deviations["no_draws"] = no_draws
-		pickle.dump(deviations, open(".\App-deviations.p", "wb"))
+		pickle.dump(deviations, open("./App-deviations.p", "wb"))
 		print("Deviation dictionary succesfully saved")
 
 		# Routine to calculate how the uncertainty of the set of uncertainties converges with increasing iterations.
@@ -213,7 +215,7 @@ if __name__=="__main__":
 			convergence["close68"] = convergence_close68
 			convergence["stddev"] = convergence_stddev
 			convergence["no_draws"] = no_draws
-			pickle.dump(convergence, open(".\App-convergence.p", "wb"))
+			pickle.dump(convergence, open("./App-convergence.p", "wb"))
 			print("Convergence dictionaries saved")
 
 	# Routine to calculate how the distributions of uncertainties develops with different number of draws.
@@ -262,5 +264,5 @@ if __name__=="__main__":
 		development["close68_uncs"] = close68_uncs
 		development["stddev_means"] = stddev_means
 		development["stddev_uncs"] = stddev_uncs
-		pickle.dump(development, open(".\App-development.p", "wb"))
+		pickle.dump(development, open("./App-development.p", "wb"))
 		print("Development dictionary succesfully saved")
